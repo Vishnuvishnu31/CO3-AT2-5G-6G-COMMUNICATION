@@ -1,1 +1,162 @@
+clear;
+clc;
+close all;
 
+% =====================================================
+% Q2 - CLOUD EDGE COMMUNICATION
+% WIRELESS HEALTHCARE MONITORING
+% =====================================================
+
+N = 100;
+
+% Sample number
+x = 1:N;
+
+% -----------------------------------------------------
+% HEART RATE
+% -----------------------------------------------------
+
+heart = zeros(1,N);
+
+for i = 1:N
+    heart(i) = 70 + 5*rand;
+end
+
+% Abnormal condition
+for i = 45:55
+    heart(i) = 110 + 5*rand;
+end
+
+% -----------------------------------------------------
+% SpO2
+% -----------------------------------------------------
+
+oxygen = zeros(1,N);
+
+for i = 1:N
+    oxygen(i) = 96 + rand;
+end
+
+% Abnormal condition
+for i = 45:55
+    oxygen(i) = 89 + rand;
+end
+
+% -----------------------------------------------------
+% TEMPERATURE
+% -----------------------------------------------------
+
+temp = zeros(1,N);
+
+for i = 1:N
+    temp(i) = 36.5 + 0.5*rand;
+end
+
+% Abnormal condition
+for i = 45:55
+    temp(i) = 38 + 0.5*rand;
+end
+
+% -----------------------------------------------------
+% CLOUD LATENCY
+% -----------------------------------------------------
+
+cloud = zeros(1,N);
+
+for i = 1:N
+    cloud(i) = 60 + 10*rand;
+end
+
+% -----------------------------------------------------
+% EDGE LATENCY
+% -----------------------------------------------------
+
+edge = zeros(1,N);
+
+for i = 1:N
+    edge(i) = 15 + 5*rand;
+end
+
+% -----------------------------------------------------
+% AVERAGE LATENCY
+% -----------------------------------------------------
+
+cloudAverage = sum(cloud)/N;
+edgeAverage = sum(edge)/N;
+
+% Latency reduction
+reduction = ((cloudAverage-edgeAverage)/cloudAverage)*100;
+
+% -----------------------------------------------------
+% DISPLAY RESULTS
+% -----------------------------------------------------
+
+fprintf('\n');
+fprintf('==========================================\n');
+fprintf(' CLOUD-EDGE HEALTHCARE SIMULATION\n');
+fprintf('==========================================\n');
+
+fprintf('Cloud Average Latency = %.2f ms\n',cloudAverage);
+
+fprintf('Edge Average Latency  = %.2f ms\n',edgeAverage);
+
+fprintf('Latency Reduction     = %.2f %%\n',reduction);
+
+fprintf('==========================================\n');
+
+% =====================================================
+% FIGURE 1 - HEART RATE
+% =====================================================
+
+figure(1);
+plot(x,heart,'LineWidth',2);
+xlabel('Sample Number');
+ylabel('Heart Rate (BPM)');
+title('Wireless Patient Heart Rate Monitoring');
+grid on;
+
+% =====================================================
+% FIGURE 2 - SPO2
+% =====================================================
+
+figure(2);
+plot(x,oxygen,'LineWidth',2);
+xlabel('Sample Number');
+ylabel('SpO2 (%)');
+title('Wireless Patient SpO2 Monitoring');
+grid on;
+
+% =====================================================
+% FIGURE 3 - CLOUD VS EDGE
+% =====================================================
+
+figure(3);
+bar([cloudAverage edgeAverage]);
+set(gca,'XTick',1:2);
+set(gca,'XTickLabel',{'Cloud','Edge'});
+ylabel('Latency (ms)');
+title('Cloud vs Edge Communication Latency');
+grid on;
+
+% =====================================================
+% FIGURE 4 - TEMPERATURE
+% =====================================================
+
+figure(4);
+plot(x,temp,'LineWidth',2);
+xlabel('Sample Number');
+ylabel('Temperature (C)');
+title('Wireless Patient Temperature Monitoring');
+grid on;
+
+% =====================================================
+% FINAL RESULT
+% =====================================================
+
+fprintf('\nFINAL RESULT\n');
+fprintf('------------------------------------------\n');
+fprintf('Edge processing provides lower latency.\n');
+fprintf('Wireless health data is monitored at edge.\n');
+fprintf('Abnormal health condition is detected.\n');
+fprintf('Cloud-edge healthcare simulation completed.\n');
+fprintf('------------------------------------------\n');

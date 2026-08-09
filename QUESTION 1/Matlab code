@@ -1,1 +1,117 @@
+clear;
+clc;
+close all;
 
+% Q1 MEC SMART TRAFFIC SIMULATION
+
+N = 1000;
+
+% CLOUD LATENCY
+cloud_wireless = 5 + 2*rand(1,N);
+cloud_backhaul = 20 + 5*rand(1,N);
+cloud_processing = 30 + 5*rand(1,N);
+cloud_propagation = 5;
+
+C = cloud_wireless + cloud_backhaul + ...
+    cloud_processing + cloud_propagation;
+
+% MEC LATENCY
+mec_wireless = 5 + 2*rand(1,N);
+mec_backhaul = 2 + rand(1,N);
+mec_processing = 5 + 2*rand(1,N);
+mec_propagation = 0.5;
+
+M = mec_wireless + mec_backhaul + ...
+    mec_processing + mec_propagation;
+
+% AVERAGE
+Cavg = mean(C);
+Mavg = mean(M);
+
+reduction = (Cavg-Mavg)/Cavg*100;
+
+% DISPLAY
+fprintf('\n');
+fprintf('=====================================\n');
+fprintf(' MEC SMART TRAFFIC SIMULATION\n');
+fprintf('=====================================\n');
+fprintf('Cloud Average Latency = %.2f ms\n',Cavg);
+fprintf('MEC Average Latency   = %.2f ms\n',Mavg);
+fprintf('Latency Reduction     = %.2f %%\n',reduction);
+fprintf('=====================================\n');
+
+% GRAPH 1
+figure(1);
+bar([Cavg Mavg]);
+set(gca,'XTick',1:2);
+set(gca,'XTickLabel',{'Cloud','MEC'});
+ylabel('Latency (ms)');
+title('Cloud vs MEC Latency');
+grid on;
+
+% GRAPH 2
+loadValue = 10:10:100;
+
+cloudLoad = Cavg .* (1 + 0.02*loadValue);
+mecLoad = Mavg .* (1 + 0.01*loadValue);
+
+figure(2);
+plot(loadValue,cloudLoad,'-o','LineWidth',2);
+hold on;
+plot(loadValue,mecLoad,'-s','LineWidth',2);
+xlabel('Traffic Load (%)');
+ylabel('Latency (ms)');
+title('Latency vs Traffic Load');
+legend('Cloud','MEC');
+grid on;
+
+% GRAPH 3
+figure(3);
+histogram(C,20);
+hold on;
+histogram(M,20);
+xlabel('Latency (ms)');
+ylabel('Packets');
+title('Latency Distribution');
+legend('Cloud','MEC');
+grid on;
+
+% FINAL RESULT
+fprintf('\nFINAL RESULT\n');
+
+if Mavg < Cavg
+    fprintf('MEC latency is LOWER than Cloud latency.\n');
+    fprintf('MEC is suitable for real-time smart traffic.\n');
+end
+
+fprintf('Simulation completed successfully.\n');
+
+
+
+%% GRAPH 4 - DYNAMIC RESOURCE ALLOCATION
+
+numberOfVehicles = 10:10:100;
+
+% Available MEC computing resource
+mecResource = 20 + 0.7*numberOfVehicles;
+
+% Cloud resource requirement
+cloudResource = 30 + 1.0*numberOfVehicles;
+
+figure(4);
+
+plot(numberOfVehicles,cloudResource,'-o','LineWidth',2);
+
+hold on;
+
+plot(numberOfVehicles,mecResource,'-s','LineWidth',2);
+
+xlabel('Number of Vehicles');
+
+ylabel('Computing Resource (%)');
+
+title('Dynamic Resource Allocation');
+
+legend('Cloud','MEC');
+
+grid on;
